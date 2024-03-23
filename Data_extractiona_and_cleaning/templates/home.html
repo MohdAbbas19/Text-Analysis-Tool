@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding-top: 20px;
+        }
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .form-container1 {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .form-container h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-container p {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
+        .form-container2 input[type="submit"]:hover {
+            background-color: #74d0fb;
+        }
+        .form-container2 {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .form-container2 h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-container2 p {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
+        .form-container2 input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .main_form{
+            display: flex;
+            flex-direction: row;
+        }
+        .form-container2 input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #31bbfb;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .result-container {
+            margin-top: 20px;
+        }
+        .result-container h2{
+            margin-left: 45%;
+            margin-right: 40%;
+            color: #060606;
+        }
+        .result-text {
+            font-size: 10px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .download-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .download-btn {
+            padding: 10px 20px;
+            background-color: #31bbfb;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .download-btn:hover {
+            background-color: #74d0fb;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            overflow: hidden; /* Hide overflow content */
+            white-space: nowrap; /* Prevent wrapping */
+            text-overflow: ellipsis; /* Show ellipsis (...) for truncated text */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Text Analysis Tool</h1>
+        </div>
+      
+        <div class="form-container2">
+            
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <h2>Upload Your Text File</h2>
+                <p>Select an Excel or CSV file to analyze:</p>
+                <input type="file" name="excel_file" accept=".xlsx, .xls, .csv" class="file-input">
+                
+                <input type="submit" value="Upload">
+            </form>
+            <form action="/analyze" method="POST">
+                <select name="selected_column" id="columnDropdown">
+                    {% for column in column_names %}
+                        <option value="{{ column }}">{{ column }}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                <input type="submit" value="Analyze Selected Column">
+            </form>
+            
+        </div>
+
+        <div class="result-container">
+            <h2>Data</h2>
+            <div class="result-text" style="overflow-x: auto;">
+                <table>
+                    {{ data | safe }}
+                </table>
+            </div>
+        </div>
+        <div class="download-link">
+            <a href="/download" class="download-btn">Download Processed Data</a>
+        </div>
+    </div>
+    <script>
+        // Get all table cells
+        var cells = document.querySelectorAll('td');
+
+        // Loop through each cell
+        cells.forEach(function(cell) {
+            // Get the text content of the cell
+            var text = cell.textContent.trim();
+            
+            // Check if the text is longer than 40 characters
+            if (text.length > 40) {
+                // Truncate the text to 40 characters
+                var truncatedText = text.slice(0, 40) + '...';
+                
+                // Update the cell content with the truncated text
+                cell.textContent = truncatedText;
+            }
+        });
+    </script>
+</body>
+</html>
